@@ -193,7 +193,7 @@ main {
 
 .modal-confirmation {
 	height: 780px;
-	display: flex;
+	display: none;
 	flex-direction: column;
 	justify-content: flex-end;
 }
