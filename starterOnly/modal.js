@@ -16,7 +16,7 @@ const form = document.querySelector("form");
 const formData = document.querySelectorAll(".formData");
 const submitBtn = document.querySelector(".btn-submit");
 
-const nameInput = document.querySelector("#first");
+const fnameInput = document.getElementById("first");
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -34,57 +34,30 @@ function launchModal() {
 	modalbg.style.display = "block";
 }
 
-// // error validation
-// function checkFormValidity() {
-// 	if (formData.input.checkValidity() == false) {
-// 		 console.log("INVALID FORM!")
-// 		//  $("#errors").empty();
-// 		//  $("#errors").text("error message");
-// 	}
-//  };
-
-// const input = document.querySelector("input");
-// const log = document.getElementById("log");
-
-// formData.forEach((fdata) =>
-// 	fdata.querySelector("input").addEventListener("invalid", (e) => {
-// 		console.log(e);
-// 		e.target.parentNode.setAttribute("data-error-visible", "true");
-// 		if (e.target.validity.valueMissing) {
-// 			e.target.parentNode.setAttribute(
-// 				"data-error",
-// 				"Veuillez renseigner ce champ."
-// 			);
-// 		} else if (e.target.validity.tooShort) {
-// 			e.target.parentNode.setAttribute(
-// 				"data-error",
-// 				"Veuillez entrer 2 caractères ou plus pour le champ du nom."
-// 			);
-// 		}
-// 	})
-// );
+function testName(nameElement) {
+	if (!nameElement.value) {
+		
+		console.log("Please add a name");
+	} else if (nameElement.value.length < 2) {
+		console.log("The name should be at least 2 char");
+	}
+}
 
 function validate() {
+	var isValid = true;
 	console.log("Hello!!!");
+	if (!testName(fnameInput)) {
+		isValid = false;
+	}
+	// if (!testName(nameInput)) {
+	// 	isValid = false;
+	// }
+	
+	
+	// console.log(fnameInput.value);
 	// if (formData.querySelector(".name").value) {
-	console.log(nameInput).value;
 	// console.log(formData.querySelector("#first"));
 	// }
 
 	return false;
-	// form.reportValidity();
-	// formData.forEach((fdata) => {
-	// 	var inpt = fdata.childNodes[4];
-	// 	// querySelector("input");
-	// 	console.log(inpt);
-	// 	if (inpt.target.validity.valueMissing) {
-	// 		fdata.setAttribute("data-error", "Veuillez renseigner ce champ.");
-	// 	} else if (inpt.target.validity.tooShort) {
-	// 		fdata.setAttribute(
-	// 			"data-error",
-	// 			"Veuillez entrer 2 caractères ou plus pour le champ du nom."
-	// 		);
-	// 	}
-	// 	fdata.setAttribute("data-error-visible", "true");
-	// });
 }
