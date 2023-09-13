@@ -14,19 +14,18 @@
   <body>
     <div class="topnav" id="myTopnav">
       <div class="header-logo">
-      <img alt="logo" src="Logo.png" width="auto" height="auto" />
-    </div>
-    <div class="main-navbar">
-      
-      <a href="#" class="active"><span>Accueil</span></a>
-      <a href="#"><span>Détails de l'évènement</span></a>
-      <a href="#"><span>À propos</span></a>
-      <a href="#"><span>Contact</span></a>
-      <a href="#"><span>Évènements passés</span></a>
-      <a href="javascript:void(0);" class="icon" onclick="editNav()">
-        <i class="fa fa-bars"></i>
-      </a>
-    </div>
+        <img alt="logo" src="Logo.png" width="auto" height="auto" />
+      </div>
+      <div class="main-navbar">
+        <a href="#" class="active"><span>Accueil</span></a>
+        <a href="#"><span>Détails de l'évènement</span></a>
+        <a href="#"><span>À propos</span></a>
+        <a href="#"><span>Contact</span></a>
+        <a href="#"><span>Évènements passés</span></a>
+        <a href="javascript:void(0);" class="icon" onclick="editNav()">
+          <i class="fa fa-bars"></i>
+        </a>
+      </div>
     </div>
   </div>
     <main>
@@ -60,7 +59,6 @@
               name="reserve"
               action="index.html"
               method="GET"
-              onsubmit="return validate();"
             >
               <div
                 class="formData">
@@ -91,7 +89,7 @@
                 <label for="email">E-mail</label><br>
                 <input
                   class="text-control"
-                  type="email"
+                  type="text"
                   id="email"
                   name="email"
                   DISABLED-required
@@ -199,6 +197,8 @@
                   J'ai lu et accepté les conditions d'utilisation.
                 </label>
                 <br>
+                </div>
+                <div>
                 <input class="checkbox-input" type="checkbox" id="checkbox2" />
                 <label class="checkbox2-label" for="checkbox2">
                   <span class="checkbox-icon"></span>
