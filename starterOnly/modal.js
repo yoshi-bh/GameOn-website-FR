@@ -45,88 +45,142 @@ function launchModal() {
 }
 
 // validate form
-function testName(nameElement) {
-	const fData = nameElement.parentElement;
+function testName(nameElement, display) {
 	const value = nameElement.value.trim();
-	fData.setAttribute("data-error-visible", "true");
 	if (!value) {
-		fData.setAttribute("data-error", "Veuillez renseigner ce champ.");
-		throw new Error(`Le champ ${nameElement.id} est vide`);
+		return [
+			nameElement,
+			display
+				? "Veuillez renseigner ce champ."
+				: `Le champ ${nameElement.id} est vide`,
+		];
 	} else if (value.length < 2) {
-		fData.setAttribute(
-			"data-error",
-			"Veuillez entrer 2 caractères ou plus pour le champ du nom."
-		);
-		throw new Error(`Le champ ${nameElement.id} est trop court`);
+		return [
+			nameElement,
+			display
+				? "Veuillez entrer 2 caractères ou plus pour le champ du nom."
+				: `Le champ ${nameElement.id} est trop court`,
+		];
 	}
-	fData.setAttribute("data-error-visible", "false");
-	return true;
+	return [nameElement, ""];
 }
 
-function testEmail(emailElement) {
-	const fData = emailElement.parentElement;
+function testEmail(emailElement, display) {
 	const value = emailElement.value.trim();
 	const regex = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+.[a-z0-9._-]+");
-	fData.setAttribute("data-error-visible", "true");
 	if (!value) {
-		fData.setAttribute("data-error", "Veuillez renseigner ce champ.");
-		throw new Error(`Le champ ${emailElement.id} est vide`);
+		return [
+			emailElement,
+			display
+				? "Veuillez renseigner ce champ."
+				: `Le champ ${emailElement.id} est vide`,
+		];
 	} else if (!regex.test(value)) {
-		fData.setAttribute("data-error", "Veuillez entrer un email valid.");
-		throw new Error(`Le champ ${emailElement.id} n'est pas valid`);
+		return [
+			emailElement,
+			display
+				? "Veuillez entrer un email valid."
+				: `Le champ ${emailElement.id} n'est pas valid`,
+		];
 	}
-	fData.setAttribute("data-error-visible", "false");
-	return true;
+	return [emailElement, ""];
 }
 
-function isNotEmpty(inptElement) {
-	const fData = inptElement.parentElement;
+function isNotEmpty(inptElement, display) {
 	const value = inptElement.value.trim();
 	if (!value) {
-		fData.setAttribute("data-error", "Veuillez renseigner ce champ.");
-		fData.setAttribute("data-error-visible", "true");
-		throw new Error(`Le champ ${inptElement.id} est vide`);
+		return [
+			inptElement,
+			display
+				? "Veuillez renseigner ce champ."
+				: `Le champ ${inptElement.id} est vide`,
+		];
 	}
-	fData.setAttribute("data-error-visible", "false");
-	return true;
+	return [inptElement, ""];
 }
 
-function isChecked(testedElements) {
-	const fData = testedElements[0].parentElement;
+function isChecked(testedElements, display) {
 	for (elem of testedElements) {
-		console.log(elem);
 		if (elem.checked) {
-			fData.setAttribute("data-error-visible", "false");
-			return true;
+			return [testedElements[0], ""];
 		}
 	}
-	fData.setAttribute("data-error-visible", "true");
-	fData.setAttribute("data-error", "Cette case est obligatoire.");
-	throw new Error(`Le champ ${testedElements[0].id} est obligatoire`);
+	return [
+		testedElements[0],
+		display
+			? "Cette case est obligatoire."
+			: `Le champ ${testedElements[0].id} est obligatoire`,
+	];
 }
 
+function catchError(errorElement, errorMessage) {
+	if (errorMessage !== "") {
+		throw new Error(errorMessage);
+	}
+}
+
+function displayError(errorElement, errorMessage) {
+	console.log(errorElement + " ||| " + errorMessage);
+	const fData = errorElement.parentElement;
+	if (errorMessage === "") {
+		fData.setAttribute("data-error-visible", "false");
+		return;
+	}
+	fData.setAttribute("data-error-visible", "true");
+	fData.setAttribute("data-error", errorMessage);
+}
+
+// error verification on submit
 form.addEventListener("submit", (event) => {
 	try {
 		event.preventDefault();
 
-		testName(fnameInput);
-		testName(lnameInput);
-		testEmail(emailInput);
-		isNotEmpty(bdInput);
-		isNotEmpty(qtyInput);
-		isChecked(radioInputs);
-		isChecked([conditionInput]);
+		catchError(...testName(fnameInput, false));
+		catchError(...testName(lnameInput, false));
+		catchError(...testEmail(emailInput), false);
+		catchError(...isNotEmpty(bdInput), false);
+		catchError(...isNotEmpty(qtyInput), false);
+		catchError(...isChecked(radioInputs), false);
+		catchError(...isChecked([conditionInput]), false);
 
 		modalBody.style.display = "none";
 		modalConf.style.display = "flex";
+		form.submit();
+		form.reset();
 	} catch (error) {
+		displayError(...testName(fnameInput, true));
+		displayError(...testName(lnameInput, true));
+		displayError(...testEmail(emailInput, true));
+		displayError(...isNotEmpty(bdInput, true));
+		displayError(...isNotEmpty(qtyInput, true));
+		displayError(...isChecked(radioInputs, true));
+		displayError(...isChecked([conditionInput], true));
+
 		console.log(error);
 	}
 });
 
-fnameInput.addEventListener("change", () => testName(fnameInput));
-lnameInput.addEventListener("change", () => testName(lnameInput));
-emailInput.addEventListener("change", () => testEmail(emailInput));
-bdInput.addEventListener("change", () => isNotEmpty(bdInput));
-qtyInput.addEventListener("change", () => isNotEmpty(qtyInput));
-conditionInput.addEventListener("change", () => isChecked([conditionInput]));
+// Error verification on user input
+fnameInput.addEventListener("change", () =>
+	displayError(...testName(fnameInput, true))
+);
+lnameInput.addEventListener("change", () =>
+	displayError(...testName(lnameInput, true))
+);
+emailInput.addEventListener("change", () =>
+	displayError(...testEmail(emailInput, true))
+);
+bdInput.addEventListener("change", () =>
+	displayError(...isNotEmpty(bdInput, true))
+);
+qtyInput.addEventListener("change", () =>
+	displayError(...isNotEmpty(qtyInput, true))
+);
+for (radioInput of radioInputs) {
+	radioInput.addEventListener("change", () =>
+		displayError(...isChecked(radioInputs, true))
+	);
+}
+conditionInput.addEventListener("change", () =>
+	displayError(...isChecked([conditionInput], true))
+);
