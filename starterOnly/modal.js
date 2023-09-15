@@ -86,6 +86,26 @@ function testEmail(emailElement, display) {
 	return [emailElement, ""];
 }
 
+function testDate(dateElement, display) {
+	const value = dateElement.value.trim();
+	if (!value) {
+		return [
+			dateElement,
+			display
+				? "Veuillez renseigner ce champ."
+				: `Le champ ${dateElement.id} est vide`,
+		];
+	} else if (new Date(value).getTime() >= new Date().getTime()) {
+		return [
+			dateElement,
+			display
+				? "Veuillez entrer une date de naissance valid."
+				: `Le champ ${dateElement.id} n'est pas valid`,
+		];
+	}
+	return [dateElement, ""];
+}
+
 function isNotEmpty(inptElement, display) {
 	const value = inptElement.value.trim();
 	if (!value) {
@@ -138,7 +158,7 @@ form.addEventListener("submit", (event) => {
 		catchError(...testName(fnameInput, false));
 		catchError(...testName(lnameInput, false));
 		catchError(...testEmail(emailInput), false);
-		catchError(...isNotEmpty(bdInput), false);
+		catchError(...testDate(bdInput), false);
 		catchError(...isNotEmpty(qtyInput), false);
 		catchError(...isChecked(radioInputs), false);
 		catchError(...isChecked([conditionInput]), false);
@@ -151,7 +171,7 @@ form.addEventListener("submit", (event) => {
 		displayError(...testName(fnameInput, true));
 		displayError(...testName(lnameInput, true));
 		displayError(...testEmail(emailInput, true));
-		displayError(...isNotEmpty(bdInput, true));
+		displayError(...testDate(bdInput, true));
 		displayError(...isNotEmpty(qtyInput, true));
 		displayError(...isChecked(radioInputs, true));
 		displayError(...isChecked([conditionInput], true));
@@ -171,7 +191,7 @@ emailInput.addEventListener("change", () =>
 	displayError(...testEmail(emailInput, true))
 );
 bdInput.addEventListener("change", () =>
-	displayError(...isNotEmpty(bdInput, true))
+	displayError(...testDate(bdInput, true))
 );
 qtyInput.addEventListener("change", () =>
 	displayError(...isNotEmpty(qtyInput, true))
